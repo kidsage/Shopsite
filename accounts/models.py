@@ -51,7 +51,6 @@ class User(AbstractBaseUser):
 
     is_active = models.BooleanField("계정 활성화 상태", default=True)
     is_admin = models.BooleanField(default=False)
-    is_seller = models.BooleanField("판매자", default=False)
 
     # id field
     USERNAME_FIELD = 'email'
@@ -85,14 +84,15 @@ class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='address')
     address = models.CharField("주소", max_length=100)
     zip_code = models.CharField("우편번호", max_length=10)
-    address_tag = models.CharField("배송지명", max_length=20)
-    name = models.CharField("받는분 성함", max_length=20)
+    tag = models.CharField("배송지명", max_length=20)
+    receiver_name = models.CharField("받는분 성함", max_length=20)
 
     def __str__(self):
         return f"{self.user.name}님의 배송지 : {self.address_tag}"
 
     class Meta:
         db_table = 'address'
+
 
 class Profile(models.Model):
 
