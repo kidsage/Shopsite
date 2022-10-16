@@ -52,10 +52,6 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField("계정 활성화 상태", default=True)
     is_admin = models.BooleanField(default=False)
     is_seller = models.BooleanField("판매자", default=False)
-    is_terms_of_service = models.BooleanField("서비스 이용약관 동의")
-    is_privacy_policy = models.BooleanField("개인정보 처리방침 동의")
-    is_receive_marketing_info = models.BooleanField("마케팅정보 수신 동의")
-    is_admin = models.BooleanField("관리자", default=False)
 
     # id field
     USERNAME_FIELD = 'email'
@@ -81,6 +77,9 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
 
+    class Meta:
+        db_table = 'user'
+
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='address')
@@ -92,6 +91,8 @@ class Address(models.Model):
     def __str__(self):
         return f"{self.user.name}님의 배송지 : {self.address_tag}"
 
+    class Meta:
+        db_table = 'address'
 
 class Profile(models.Model):
 
@@ -105,9 +106,15 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    nickname = models.CharField("유저 닉네임", max_length=8)
+    nickname = models.CharField("유저 닉네임", max_length=8, unique=True)
     image = models.ImageField("프로필 이미지", upload_to=user_directory_path, null=True)
     gender = models.CharField("성별", max_length=1, choices=GENDER_CHOICES)
-    date_of_birth = models.DateField("생년월일")
-    phonenumber = PhoneNumberField("전화번호", region='KR') # iso 3166-1 region codes
-    introduce = models.CharField("간략한 소개", max_length=50)
+    date_of_birth = models.DateField("생년월일", null=True)
+    phonenumber = PhoneNumberField("전화번호", region='KR', null=True, blank=True) # iso 3166-1 region codes
+    introduce = models.CharField("간략한 소개", max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
+    class Meta:
+        db_table = 'profile'
