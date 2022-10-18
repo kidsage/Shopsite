@@ -1,7 +1,7 @@
-from datetime import timezone
+from datetime import datetime
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
-from phonenumber_field.formfields import PhoneNumberField
+from django.core.validators import RegexValidator
 
 
 # Create your models here.
@@ -46,7 +46,7 @@ class User(AbstractBaseUser):
         unique=True, 
     )
 
-    date_joined = models.DateTimeField(default=timezone.now)
+    date_joined = models.DateTimeField(default=datetime.now())
     followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
 
     is_active = models.BooleanField("계정 활성화 상태", default=True)
@@ -110,7 +110,8 @@ class Profile(models.Model):
     image = models.ImageField("프로필 이미지", upload_to=user_directory_path, null=True)
     gender = models.CharField("성별", max_length=1, choices=GENDER_CHOICES)
     date_of_birth = models.DateField("생년월일", null=True)
-    phonenumber = PhoneNumberField("전화번호", region='KR', null=True, blank=True) # iso 3166-1 region codes
+    phoneNumberRegex = RegexValidator(regex = r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
+    phonenumber = models.CharField("전화번호", validators = [phoneNumberRegex], max_length = 11, unique = True)
     introduce = models.CharField("간략한 소개", max_length=50, null=True, blank=True)
 
     def __str__(self):
