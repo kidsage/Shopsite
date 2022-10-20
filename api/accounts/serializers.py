@@ -1,8 +1,12 @@
-from rest_framework import serializers
 from accounts.models import *
-
+from rest_framework import serializers
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import update_last_login
 
 #
+JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
+JWT_ENCODE_HANDLER  = api_settings.JWT_ENCODE_HANDLER
+
 class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -36,6 +40,26 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'password', 'address', 'profile']
+
+    def validate(self, data):
+        user, is_created = User.objects.get_or_create(email=data["email"])
+        
+        # if is_created:
+        #     subcategory_ids = Subcategory.objects.filter(category_id=1).values_list('id', flat=True)
+        #     Filter.objects.bulk_create(
+        #         [Filter(user_id = user.id, subcategory_id = id) for id in subcategory_ids]
+        #     )
+        
+        payload   = JWT_PAYLOAD_HANDLER(user)
+        jwt_token = JWT_ENCODE_HANDLER(payload)
+        
+        update_last_login(None, user)
+        
+        results = {
+                'access_token' : jwt_token
+            }
+
+        return results
 
     def create(self, validated_data):
         instance = User(**validated_data)

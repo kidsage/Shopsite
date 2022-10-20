@@ -37,6 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Authentication
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+
+    # My Apps
     'api',
     'accounts',
 ]
@@ -136,3 +147,17 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # DRF
+AUTH_USER_MODEL = 'accounts.User'
+## JWT
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'my-app-auth'
+JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
+
+## Django allauth
+SITE_ID = 1 # 해당 도메인의 id
+ACCOUNT_UNIQUE_EMAIL = True # User email unique 사용 여부
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None # User username type
+ACCOUNT_USERNAME_REQUIRED = False # ser username 필수 여부
+ACCOUNT_EMAIL_REQUIRED = True # User email 필수 여부
+ACCOUNT_AUTHENTICATION_METHOD = 'email' # 로그인 인증 수단
+ACCOUNT_EMAIL_VERIFICATION = 'none' # Email 인증 필수 여부

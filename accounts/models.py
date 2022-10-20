@@ -51,6 +51,7 @@ class User(AbstractBaseUser):
 
     is_active = models.BooleanField("계정 활성화 상태", default=True)
     is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
     # id field
     USERNAME_FIELD = 'email'
@@ -76,6 +77,7 @@ class Address(models.Model):
     zip_code = models.CharField("우편번호", max_length=10)
     tag = models.CharField("배송지명", max_length=20)
     receiver_name = models.CharField("받는분 성함", max_length=20)
+    is_main = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.name}님의 배송지 : {self.address_tag}"
