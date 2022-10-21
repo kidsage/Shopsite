@@ -1,44 +1,25 @@
-# from rest_framework import status
-# from rest_framework import permissions
-# from rest_framework.response import Response
-# from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework.permissions import IsAdminUser,IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 
-# Create your views here.
+from accounts.models import *
+from .serializers import *
 
-# update에 사용할 코드
-# def update(self, request, *args, **kwargs):
-#     serializer = self.serializer_class(request.user, data=request.data, partial=True)
-#     serializer.is_valid(raise_exception=True)
-#     serializer.save()
-#     return Response(serializer.data, status=status.HTTP_200_OK)
+#Create your views here.
+class UserSignInGenericAPIView(generics.GenericAPIView):
+    queryset            = User.objects.all()
+    serializer_class    = UserSerializer
+    permission_classes  = [AllowAny,]
 
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
 
-""" 테스트용 코드
-class ProfileViewSet(ViewSet):
+        if not serializer.is_valid(raise_exception=True):
+            return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
 
-    def partial_update(self, request, pk=None):    #partially update the profile
+        response = {           
+            'access_token'  : serializer.validated_data['access_token']
+        }
 
-        try:
-            user_detail = user_reg.objects.get(pk=pk)
-           
-            serializer = RegisterSerializer(user_detail,data=request.data, partial=True)
-
-            if not serializer.is_valid():
-                return Response({'data':'internal server error','message':'error aa gyi'},500)
-
-            serializer.save()
-
-        except Exception as e:
-
-            return Response('some exception occured' + str(e))
-
-        return Response('record Updated successfully')
-
-    def retrieve(self,request, pk=None):    #get or retrieve the profile from database
-
-        queryset = user_reg.objects.get(pk=pk)
-    
-        serializer_class = RegisterSerializer(queryset)
-    
-        return Response(serializer_class.data)
-"""
+        return Response(response, status=status.HTTP_200_OK)
