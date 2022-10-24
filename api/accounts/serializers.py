@@ -24,11 +24,32 @@ class AddressSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+class FollowingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Follow
+        fields = '__all__'
+
+
+class FollowersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
+        fields = '__all__'
+
+
 class ProfileSerializer(serializers.ModelSerializer):
+    followings = serializers.SerializerMethodField()
+    followers = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ['nickname', 'image', 'gender', 'date_of_birth', 'phonenumber', 'introduce']
+        fields = ['nickname', 'image', 'gender', 'date_of_birth', 'phonenumber', 'introduce', 'followings', 'followers']
+
+    def get_followings(self, obj):
+        return FollowingSerializer(obj.following.all(), many=True).data
+
+    def get_followers(self, obj):
+        return FollowersSerializer(obj.followers.all(), many=True).data
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -40,6 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'password', 'address', 'profile']
+        extra_kwargs = {"password": {"write_only": True}}
 
     def validate(self, data):
         user, is_created = User.objects.get_or_create(email=data["email"])
@@ -67,6 +89,18 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+    def create(self, validated_data):
+        login_id = validated_data.get('login_id')
+        email = validated_data.get('email')
+        password = validated_data.get('password')
+        user = User(
+            login_id=login_id,
+            email=email
+        )
+        user.set_password(password)
+        user.save()
+        return user
 
     def update(self, instance, validated_data):
         # instance에는 입력된 object가 담긴다.

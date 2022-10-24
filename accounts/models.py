@@ -42,12 +42,11 @@ class User(AbstractBaseUser):
     objects = CustomUserManager()
 
     email = models.EmailField(        
-        max_length=255,      
-        unique=True, 
+        max_length=255,
+        unique=True,
     )
 
     date_joined = models.DateTimeField(default=datetime.now())
-    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
 
     is_active = models.BooleanField("계정 활성화 상태", default=True)
     is_admin = models.BooleanField(default=False)
@@ -111,3 +110,20 @@ class Profile(models.Model):
 
     class Meta:
         db_table = 'profile'
+
+
+class Follow(models.Model):
+    # followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user','following'],  name="unique_followers")
+        ]
+
+        ordering = ["-created"]
+
+    def __str__(self):
+        f"{self.user} follows {self.following}"
