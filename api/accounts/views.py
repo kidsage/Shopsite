@@ -1,3 +1,4 @@
+from ast import Mod
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -13,13 +14,13 @@ class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class AddressView(ModelViewSet):
+class AddressViewSet(ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
 
 
-class ProfileView():
+class ProfileViewSet(ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = Profile
     permission_classes = [IsAuthenticatedOrReadOnly]
