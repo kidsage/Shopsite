@@ -52,11 +52,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         return FollowersSerializer(obj.followers.all(), many=True).data
 
 
+
 class UserSerializer(serializers.ModelSerializer):
     address = AddressSerializer(many=True, required=False)
     profile = ProfileSerializer(required=False)
-    # profile = serializers.SerializerMethodField()
-    # address = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -65,12 +64,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         user, is_created = User.objects.get_or_create(email=data["email"])
-        
-        # if is_created:
-        #     subcategory_ids = Subcategory.objects.filter(category_id=1).values_list('id', flat=True)
-        #     Filter.objects.bulk_create(
-        #         [Filter(user_id = user.id, subcategory_id = id) for id in subcategory_ids]
-        #     )
         
         payload   = JWT_PAYLOAD_HANDLER(user)
         jwt_token = JWT_ENCODE_HANDLER(payload)
@@ -89,39 +82,3 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
-    def create(self, validated_data):
-        login_id = validated_data.get('login_id')
-        email = validated_data.get('email')
-        password = validated_data.get('password')
-        user = User(
-            login_id=login_id,
-            email=email
-        )
-        user.set_password(password)
-        user.save()
-        return user
-
-    def update(self, instance, validated_data):
-        # instance에는 입력된 object가 담긴다.
-        for key, value in validated_data.items():
-            if key == "password":
-                instance.set_password(value)
-                continue
-
-            setattr(instance, key, value)
-        instance.save()
-
-        return instance
-
-    # def get_profile(self, obj):
-    #     queryset = Profile.objects.all(profile_id=obj.id)
-    #     serializer = ProfileSerializer(queryset, many=True)
-
-    #     return serializer.data
-
-    # def get_address(self, obj):
-    #     queryset = Address.objects.all()
-    #     serializer = AddressSerializer(address_id=obj.id)
-
-    #     return serializer.data
