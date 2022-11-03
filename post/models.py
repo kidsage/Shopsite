@@ -38,3 +38,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.short_content
+
+    class Meta:
+        db_table = 'comment'
