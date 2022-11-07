@@ -1,11 +1,7 @@
 from accounts.models import *
 from rest_framework import serializers
-from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 
-#
-JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
-JWT_ENCODE_HANDLER  = api_settings.JWT_ENCODE_HANDLER
 
 class AddressSerializer(serializers.ModelSerializer):
 
@@ -62,19 +58,19 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['email', 'password', 'address', 'profile']
         extra_kwargs = {"password": {"write_only": True}}
 
-    def validate(self, data):
-        user, is_created = User.objects.get_or_create(email=data["email"])
+    # def validate(self, data):
+    #     user, is_created = User.objects.get_or_create(email=data["email"])
         
-        payload   = JWT_PAYLOAD_HANDLER(user)
-        jwt_token = JWT_ENCODE_HANDLER(payload)
+    #     payload   = JWT_PAYLOAD_HANDLER(user)
+    #     jwt_token = JWT_ENCODE_HANDLER(payload)
         
-        update_last_login(None, user)
+    #     update_last_login(None, user)
         
-        results = {
-                'access_token' : jwt_token
-            }
+    #     results = {
+    #             'access_token' : jwt_token
+    #         }
 
-        return results
+    #     return results
 
     def create(self, validated_data):
         instance = User(**validated_data)

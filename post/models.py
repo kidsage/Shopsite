@@ -16,7 +16,7 @@ class Post(models.Model):
 
     class Meta:
         db_table = 'post'
-        ordering = ('update_dt',)
+        ordering = ('updated_at',)
 
 
 class Tag(models.Model):
