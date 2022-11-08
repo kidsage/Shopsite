@@ -72,9 +72,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     #     return results
 
-    def create(self, validated_data):
-        instance = User(**validated_data)
-        instance.set_password(validated_data["password"])
-        instance.save()
+    # test 11/8
+    # def create(self, validated_data):
+    #     instance = User(**validated_data)
+    #     instance.set_password(validated_data["password"])
+    #     instance.save()
 
-        return instance
+    #     return instance
