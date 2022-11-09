@@ -50,8 +50,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    address = AddressSerializer(many=True, required=False)
-    profile = ProfileSerializer(required=False)
+    # The `.create()` method does not support writable nested fields by default. 에러 해결
+    # create 에서 address, profile도 같이 생성해주도록 해보자.
+    address = AddressSerializer(many=True, required=True)
+    profile = ProfileSerializer(many=True, required=True)
 
     class Meta:
         model = User
@@ -73,9 +75,22 @@ class UserSerializer(serializers.ModelSerializer):
     #     return results
 
     # test 11/8
-    # def create(self, validated_data):
-    #     instance = User(**validated_data)
-    #     instance.set_password(validated_data["password"])
-    #     instance.save()
+    def create(self, validated_data):
 
-    #     return instance
+        # create user 
+        user = User.objects.create(
+            email = validated_data['email'],
+            password = validated_data['password'],
+        )
+
+        profile_data = validated_data.pop('profile')
+        # create profile
+        profile = Profile.objects.create(
+            user = user,
+            first_name = profile_data['first_name'],
+            last_name = profile_data['last_name'],
+        )
+
+        # address = Address
+
+        return user
