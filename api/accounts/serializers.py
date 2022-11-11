@@ -34,25 +34,26 @@ class FollowersSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    followings = serializers.SerializerMethodField()
-    followers = serializers.SerializerMethodField()
+    # followings = serializers.SerializerMethodField()
+    # followers = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ['nickname', 'image', 'gender', 'date_of_birth', 'phonenumber', 'introduce', 'followings', 'followers']
+        fields = ['nickname', 'image', 'gender', 'date_of_birth', 'phonenumber', 'introduce'] #, 'followings', 'followers']
 
-    def get_followings(self, obj):
-        return FollowingSerializer(obj.following.all(), many=True).data
+    # attribute error로 인한 수정 필요
+    # def get_followings(self, obj):
+    #     return FollowingSerializer(obj.following.all(), many=True).data
 
-    def get_followers(self, obj):
-        return FollowersSerializer(obj.followers.all(), many=True).data
+    # def get_followers(self, obj):
+    #     return FollowersSerializer(obj.followers.all(), many=True).data
 
 
 
 class UserSerializer(serializers.ModelSerializer):
     # The `.create()` method does not support writable nested fields by default. 에러 해결
     # create 에서 address, profile도 같이 생성해주도록 해보자.
-    address = AddressSerializer(required=True)
+    address = AddressSerializer(many=True, required=True)
     profile = ProfileSerializer(required=True)
 
     class Meta:
@@ -96,10 +97,10 @@ class UserSerializer(serializers.ModelSerializer):
         address_data = validated_data.pop('address')
         address = Address.objects.create(
             user = user,
-            address = profile_data['address'],
-            zip_code = profile_data['zip_code'],
-            tag = profile_data['tag'],
-            receiver_name = profile_data['receiver_name'],
+            address = address_data['address'],
+            zip_code = address_data['zip_code'],
+            tag = address_data['tag'],
+            receiver_name = address_data['receiver_name'],
         )
 
         return user
