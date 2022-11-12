@@ -122,7 +122,6 @@ class Follow(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['user','following'],  name="unique_followers")
         ]
-
         ordering = ["-created"]
 
     def __str__(self):
