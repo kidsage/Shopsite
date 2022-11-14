@@ -12,7 +12,7 @@ from .serializers import *
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     # test
     # 11/7 account test
