@@ -6,31 +6,26 @@ from django.core.validators import RegexValidator
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, password, email, **extra_fields):
-        if not username:
-            raise ValueError('Users must have an username')
+    def create_user(self, password, email, **extra_fields):
+        if not email:
+            raise ValueError('Users must have an email')
         user = self.model(
-            username=username,
             email=email,
+            password=password,
             **extra_fields
         )
+
         user.set_password(password)
         user.save(using=self._db)
         return user
 
     # python manage.py createsuperuser 사용 시 해당 함수가 사용됨
-    def create_superuser(self, username, password, email, **extra_fields):
-        extra_fields.setdefault("name", "관리자")
-        extra_fields.setdefault("birth_of_date", "1992-05-08")
-        extra_fields.setdefault("is_terms_of_service", True)
-        extra_fields.setdefault("is_privacy_policy", True)
-        extra_fields.setdefault("is_receive_marketing_info", False)
+    def create_superuser(self, password, email, **extra_fields):
         extra_fields.setdefault("is_admin", True)
 
         super_user  = self.create_user(
-            username=username,
-            password=password,
             email=email,
+            password=password,
             **extra_fields
         )
 
@@ -59,7 +54,7 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.username
+        return self.email
 
     # admin 권한 설정
     @property
