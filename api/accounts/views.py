@@ -12,10 +12,10 @@ from .serializers import *
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     # test
-    # 11/7 account test
+    # Nonetype 뜨는 에러 잡아야 할듯
     # def create(self, request, *args, **kwargs):
     #     serializer = self.get_serializer(data=request.data)
     #     serializer.is_valid(raise_exception=True)
