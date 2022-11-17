@@ -61,21 +61,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['email', 'password', 'profile'] #,'address']
         extra_kwargs = {"password": {"write_only": True}}
 
-    # def validate(self, data):
-    #     user, is_created = User.objects.get_or_create(email=data["email"])
-        
-    #     payload   = JWT_PAYLOAD_HANDLER(user)
-    #     jwt_token = JWT_ENCODE_HANDLER(payload)
-        
-    #     update_last_login(None, user)
-        
-    #     results = {
-    #             'access_token' : jwt_token
-    #         }
-
-    #     return results
-
-    # test 11/8
     def create(self, validated_data):
         # create user 
         user = User.objects.create(

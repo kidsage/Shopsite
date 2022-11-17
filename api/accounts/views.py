@@ -14,37 +14,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-    # test
-    # Nonetype 뜨는 에러 잡아야 할듯
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     user = self.perform_create(serializer)
-
-    #     token = TokenObtainPairSerializer.get_token(user)
-    #     refresh_token = str(token)
-    #     access_token = str(token.access_token)
-    #     headers = self.get_success_headers(serializer.data)
-
-    #     res = Response(
-    #         {
-    #             "user": serializer.data,
-    #             "message": "register successs",
-    #             "token": {
-    #                 "access": access_token,
-    #                 "refresh": refresh_token,
-    #             },
-    #         },
-    #         status=status.HTTP_201_CREATED,
-    #     )
-        
-    #     res.set_cookie("access", access_token, httponly=False)
-    #     res.set_cookie("refresh", refresh_token, httponly=False)
-
-    #     try:
-    #         return Response(res, headers=headers)
-    #     except:
-    #         return Response(serializer.errors ,status=status.HTTP_400_BAD_REQUEST)
+    # simple-jwt test
 
 
 class AddressViewSet(ModelViewSet):
