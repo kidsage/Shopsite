@@ -10,7 +10,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['user', 'product', 'quantity']
 
-    # 'OrderSerializer' object has no attribute 'product' 에러 해결 중
+    
     def create(self, validated_data):
 
         order = Order.objects.create(
@@ -19,9 +19,9 @@ class OrderSerializer(serializers.ModelSerializer):
             quantity = validated_data['quantity'],
         )
 
-        p_update = Product.objects.update(
-            pk = self.product.pk,
-            stock = self.product['stock'] - validated_data['quantity']
-        )
+        # p_update = Product.objects.update(
+        #     pk = self.product.pk,
+        #     stock = self.product['stock'] - validated_data['quantity']
+        # )
 
         return order
