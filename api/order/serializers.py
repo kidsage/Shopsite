@@ -19,9 +19,11 @@ class OrderSerializer(serializers.ModelSerializer):
             quantity = validated_data['quantity'],
         )
 
-        # p_update = Product.objects.update(
-        #     pk = self.product.pk,
-        #     stock = self.product['stock'] - validated_data['quantity']
-        # )
+        # product stock update
+        # 'Product' object is not subscriptable 에러 해결 중
+        updated_product = Product.objects.get(pk=order.product.pk)
+        p_update = Product.objects.update(
+            stock = updated_product['stock'] - validated_data['quantity']
+        )
 
         return order
