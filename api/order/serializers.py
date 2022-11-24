@@ -20,8 +20,8 @@ class OrderSerializer(serializers.ModelSerializer):
         )
 
         # product stock update
-        # 'Product' object is not subscriptable 에러 해결 중
-        updated_product = Product.objects.get(pk=order.product.pk)
+
+        updated_product = Product.objects.filter(pk=validated_data['product'])
         p_update = Product.objects.update(
             stock = updated_product['stock'] - validated_data['quantity']
         )
