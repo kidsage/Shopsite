@@ -20,10 +20,10 @@ class OrderSerializer(serializers.ModelSerializer):
         )
 
         # product stock update
-
-        updated_product = Product.objects.filter(pk=validated_data['product'])
+        # 모든 product stock이 줄어드는 현상 수정 필요
+        product_data = validated_data.pop('product')
         p_update = Product.objects.update(
-            stock = updated_product['stock'] - validated_data['quantity']
+            stock = product_data.stock - validated_data['quantity']
         )
 
         return order
