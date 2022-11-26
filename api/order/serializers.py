@@ -20,9 +20,9 @@ class OrderSerializer(serializers.ModelSerializer):
         )
 
         # product stock update
-        # 모든 product stock이 줄어드는 현상 수정 필요
+        # 일단 name으로 맞춰주긴 했는데, 뭔가 2번에 걸쳐 돌아가는 느낌이기는 하다.
         product_data = validated_data.pop('product')
-        p_update = Product.objects.update(
+        p_update = Product.objects.filter(name=product_data.name).update(
             stock = product_data.stock - validated_data['quantity']
         )
 
