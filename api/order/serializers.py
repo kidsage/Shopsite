@@ -28,7 +28,6 @@ class OrderSerializer(serializers.ModelSerializer):
                 stock = product_data.stock - validated_data['quantity']
             )
         else:
-
             raise ValidationError('남은 수량이 없습니다.')
 
         return order
