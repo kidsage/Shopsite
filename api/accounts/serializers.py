@@ -51,8 +51,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    # The `.create()` method does not support writable nested fields by default. 에러 해결
-    # create 에서 address, profile도 같이 생성해주도록 해보자.
+    
+    # address를 해결해봅시다.
     # address = AddressSerializer(many=True, required=False)
     profile = ProfileSerializer(required=True)
 
