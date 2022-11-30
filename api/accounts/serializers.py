@@ -53,12 +53,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     
     # address를 해결해봅시다.
-    # address = AddressSerializer(many=True, required=False)
+    address = AddressSerializer(many=True, required=False) #, queryset=Address.objects.all())
     profile = ProfileSerializer(required=True)
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'profile'] #,'address']
+        fields = ['email', 'password', 'profile','address']
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
@@ -79,13 +79,13 @@ class UserSerializer(serializers.ModelSerializer):
             introduce = profile_data['introduce'],
         )
         # create address
-        # address_data = validated_data.pop('address')
-        # address = Address.objects.create(
-        #     user = user,
-        #     address = address_data['address'],
-        #     zip_code = address_data['zip_code'],
-        #     tag = address_data['tag'],
-        #     receiver_name = address_data['receiver_name'],
-        # )
+        address_data = validated_data.pop('address')
+        address = Address.objects.create(
+            user = user,
+            address = address_data['address'],
+            zip_code = address_data['zip_code'],
+            tag = address_data['tag'],
+            receiver_name = address_data['receiver_name'],
+        )
 
         return user
