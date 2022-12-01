@@ -23,7 +23,7 @@ class AddressViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
 
 
-class ProfileViewSet(ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = Profile
-    permission_classes = [IsAuthenticated]
+# class ProfileViewSet(ModelViewSet):
+#     queryset = Profile.objects.all()
+#     serializer_class = Profile
+#     permission_classes = [IsAuthenticated]

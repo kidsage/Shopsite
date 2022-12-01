@@ -1,12 +1,13 @@
 from django.urls import path, include
 from rest_framework import routers
-from .accounts.views import UserViewSet
+from .accounts.views import UserViewSet, AddressViewSet
 from .post.views import PostViewSet, CommentViewSet
 from .order.views import OrderViewSet
 from .product.views import ProductViewSet
 
 router = routers.DefaultRouter()
 router.register(r'user', UserViewSet)
+router.register(r'address', AddressViewSet)
 router.register(r'post', PostViewSet)
 router.register(r'comment', CommentViewSet)
 router.register(r'order', OrderViewSet)
