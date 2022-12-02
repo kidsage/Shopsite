@@ -41,7 +41,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['nickname', 'image', 'gender', 'date_of_birth', 'phonenumber', 'introduce'] #, 'followings', 'followers']
 
-    # attribute error로 인한 수정 필요
+    # follow test
     # def get_followings(self, obj):
     #     return FollowingSerializer(obj.following.all(), many=True).data
 
@@ -78,15 +78,5 @@ class UserSerializer(serializers.ModelSerializer):
             phonenumber = profile_data['phonenumber'],
             introduce = profile_data['introduce'],
         )
-        # create address
-        
-        # address_data = validated_data.pop('address')
-        # address = Address.objects.create(
-        #     user = user,
-        #     address = address_data['address'],
-        #     zip_code = address_data['zip_code'],
-        #     tag = address_data['tag'],
-        #     receiver_name = address_data['receiver_name'],
-        # )
 
         return user
