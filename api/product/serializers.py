@@ -17,11 +17,15 @@ class ProductSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         # 카테고리를 create 하는게 아니라, 선택할 수 있도록 수정할 예정
-        # 수정사항 테스트 재진행(1차 성공)
         category_data = validated_data.pop('category')
-        category = Category.objects.aget_or_create(
+        exist, new = Category.objects.get_or_create(
             name = category_data['name']
         )
+
+        if exist:
+            category = exist
+        else:
+            category = new
 
         product = Product.objects.create(
             name = validated_data['name'],
