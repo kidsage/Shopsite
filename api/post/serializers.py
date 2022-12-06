@@ -7,6 +7,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['title', 'content', 'tags', 'like']
 
 
+# post comment test 진행 예정
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
