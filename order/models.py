@@ -13,3 +13,9 @@ class Order(models.Model):
 
     class Meta:
         db_table = 'order'
+
+
+# 장바구니 모델 설정 시작
+# class Cart(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+#     product = models.ForeignKey('')
