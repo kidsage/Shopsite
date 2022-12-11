@@ -6,9 +6,11 @@ from django.core.validators import RegexValidator
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
+
     def create_user(self, password, email, **extra_fields):
         if not email:
             raise ValueError('Users must have an email')
+
         user = self.model(
             email=email,
             password=password,
@@ -96,6 +98,8 @@ class Profile(models.Model):
     image = models.ImageField("프로필 이미지", upload_to=user_directory_path, null=True)
     gender = models.CharField("성별", max_length=1, choices=GENDER_CHOICES)
     date_of_birth = models.DateField("생년월일", null=True)
+
+    # why this try do that?
     phoneNumberRegex = RegexValidator(regex = r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
     phonenumber = models.CharField("전화번호", validators = [phoneNumberRegex], max_length = 11, unique = True)
     introduce = models.CharField("간략한 소개", max_length=50, null=True, blank=True)
