@@ -51,3 +51,20 @@ class OrderViewSet(viewsets.ModelViewSet):
 #         }
 #         return render(request, 'cart/cart-list.html', context)
 #     return redirect('product:my-cart')
+
+
+# 세개의 함수형 뷰 통합 예정
+# def minus_cart_item(request, product_pk):
+#     cart_item = Cart.objects.filter(product__id=product_pk)
+#     product = Product.objects.get(pk=product_pk)
+#     try:
+#         for item in cart_item:
+#             if item.product.name == product.name:
+#                 if item.quantity > 1:
+#                     item.quantity -= 1
+#                     item.save()
+#                 return redirect('product:my-cart')
+#             else:
+#                 return redirect('product:my-cart')
+#     except Cart.DoesNotExist:
+#         raise Http404
