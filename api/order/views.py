@@ -11,6 +11,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 
+# 테스트 추가 사항 있음
 # 장바구니 기능 테스트
 # def add_cart(request, product_pk):
 # 	# 상품을 담기 위해 해당 상품 객체를 product 변수에 할당
